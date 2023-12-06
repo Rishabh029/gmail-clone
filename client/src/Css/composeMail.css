@@ -1,0 +1,13 @@
+.input {
+    /* font-size: 11px; */
+    border-bottom: 1px solid #F5F5F5;
+    margin-top: 10px;
+}
+
+.RecipientWrapper {
+    display: flex;
+    flex-direction: column;
+    padding: 0 15px;
+    /* font-size: 11px; */
+    font-size: small;
+}

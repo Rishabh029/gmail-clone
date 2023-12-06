@@ -1,8 +1,8 @@
 import React from 'react'
-import { Drawer, styled } from '@mui/material'
+import { Drawer } from '@mui/material'
 import SideBarContent from './SideBarContent'
 
-function SideBar({openDrawer}) {
+function SideBar({toggleDrawer,openDrawer}) {
     return (
         <div>
             <Drawer 

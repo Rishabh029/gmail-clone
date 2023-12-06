@@ -1,4 +1,4 @@
-import { DeleteOutline, DraftsOutlined, InsertDriveFileOutlined, MailOutline, Photo, Send, SendOutlined, StarBorderOutlined } from "@mui/icons-material";
+import { DeleteOutline, InsertDriveFileOutlined, MailOutline, Photo, SendOutlined, StarBorderOutlined } from "@mui/icons-material";
 
 export const SIDEBAR_DATA = [
     {
