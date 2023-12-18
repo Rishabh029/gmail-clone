@@ -1,73 +1,95 @@
 import { Close, DeleteOutlineOutlined } from '@mui/icons-material'
 import { Dialog, Box, Typography, styled, InputBase, TextField, Button } from '@mui/material'
 import React, { useState } from 'react'
-import '../Css/composeMail.css'
+import useApi from '../hooks/useApi';
+import { API_URLS } from '../services/api.url';
+
+
+const config = {
+  Host: "smtp.elasticemail.com",
+  Username: process.env.REACT_APP_USERNAME,
+  Password: process.env.REACT_APP_PASSWORD,
+  Port: 2525,
+}
+
+const dialogStyle = {
+  height: '90%',
+  width: '80%',
+  maxWidth: '100%',
+  maxHeight: '100%',
+  boxShadow: 'none',
+  borderRadius: '10px 10px 0 0'
+}
+
+const Header = styled(Box)({
+  display: 'flex',
+  justifyContent: 'space-between',
+  background: '#f2f6fc',
+  padding: '10px 15px',
+  '& > p': {
+    fontSize: 14,
+    fontWeight: 600,
+  }
+})
+
+const Footer = styled(Box)({
+  display: 'flex',
+  padding: '10px 15px',
+  justifyContent: 'space-between',
+  alignItems: 'center'
+
+})
+
+const SendButton = styled(Button)({
+  background: '#0B57D0',
+  color: '#fff',
+  fontWeight: 500,
+  textTransform: 'none',
+  width: 100,
+  borderRadius: 18
+
+})
+
+const RecipientWrapper = styled(Box)`
+    display: flex;
+    flex-direction: column;
+    padding: 0 15px;
+    & > div {
+        font-size: 14px;
+        border-bottom: 1px solid #F5F5F5;
+        margin-top: 10px;
+    }
+`;
+
 
 function ComposeMail({ openDialog, setOpenDialog }) {
 
   const [data, setData] = useState({});
-
-  const config = {
-    Host: "smtp.elasticemail.com",
-    Username: "rishabhbahukhandi148@gmail.com",
-    Password: "B21582A6E026F9C9488584F03F27304981A4",
-    Port: 2525,
-  }
-
-  const dialogStyle = {
-    height: '90%',
-    width: '80%',
-    maxWidth: '100%',
-    maxHeight: '100%',
-    boxShadow: 'none',
-    borderRadius: '10px 10px 0 0'
-  }
-
-  const Header = styled(Box)({
-    display: 'flex',
-    justifyContent: 'space-between',
-    background: '#f2f6fc',
-    padding: '10px 15px',
-    '& > p': {
-      fontSize: 14,
-      fontWeight: 600,
-    }
-  })
-
-//   const RecipientWrapper = styled(Box)`
-//   // display: flex;
-//   // flex-direction: column;
-//   // padding: 0 15px;
-//   & > div {
-//       // font-size: 14px;
-//       // border-bottom: 1px solid #F5F5F5;
-//       // margin-top: 10px;
-//   }
-// `;
+  const sentEmailService = useApi(API_URLS.saveSentEmail);
+  const saveDraftService = useApi(API_URLS.saveDraftEmail);
 
 
-
-  const Footer = styled(Box)({
-    display: 'flex',
-    padding: '10px 15px',
-    justifyContent: 'space-between',
-    alignItems: 'center'
-
-  })
-
-  const SendButton = styled(Button)({
-    background: '#0B57D0',
-    color: '#fff',
-    fontWeight: 500,
-    textTransform: 'none',
-    width: 100,
-    borderRadius: 18
-
-  })
 
   const closeComposeMail = (e) => {
     e.preventDefault();
+    const payload = {
+      to: data.to,
+      from: 'rishabhbahukhandi148@gmail.com',
+      subject: data.subject,
+      body: data.body,
+      date: new Date(),
+      image: '',
+      name: 'Rishabh Bahukhandi',
+      starred: false,
+      type: 'drafts'
+    }
 
+    saveDraftService.call(payload);
+
+    if (!sentEmailService.error) {
+      setOpenDialog(false);
+      setData({});
+    }
     setOpenDialog(false);
   }
 
@@ -85,13 +107,35 @@ function ComposeMail({ openDialog, setOpenDialog }) {
         message => alert(message)
       );
     }
+
+    const payload = {
+      to: data.to,
+      from: 'rishabhbahukhandi148@gmail.com',
+      subject: data.subject,
+      body: data.body,
+      date: new Date(),
+      image: '',
+      name: 'Rishabh Bahukhandi',
+      starred: false,
+      type: 'sent'
+
+    }
+
+    sentEmailService.call(payload);
+
+    if (!sentEmailService.error) {
+      setOpenDialog(false);
+      setData({});
+    }
+
     setOpenDialog(false);
+
   }
 
   const onValueChange = (e) => {
-    console.log(e.target.value);
+    // console.log(e.target.value);
     setData({ ...data, [e.target.name]: e.target.value });
-    console.log(data);
+    // console.log(data);
   }
 
 
@@ -104,10 +148,10 @@ function ComposeMail({ openDialog, setOpenDialog }) {
         <Typography>New Message</Typography>
         <Close fontSize='small' onClick={(e) => closeComposeMail(e)} />
       </Header>
-      <Box className= "RecipientWrapper">
-        <InputBase placeholder='Recipients'  className= "input"  name="to" key='to' onChange={(e) => onValueChange(e)}  />
-        <InputBase placeholder='Subject' className= "input"  name="subject" key="subject" onChange={(e) => onValueChange(e)} />
-      </Box>
+      <RecipientWrapper>
+        <InputBase placeholder='Recipients' name="to" key='to' onChange={(e) => onValueChange(e)} />
+        <InputBase placeholder='Subject' name="subject" key="subject" onChange={(e) => onValueChange(e)} />
+      </RecipientWrapper>
       <TextField
         multiline
         rows={20}

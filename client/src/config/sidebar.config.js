@@ -2,33 +2,33 @@ import { DeleteOutline, InsertDriveFileOutlined, MailOutline, Photo, SendOutline
 
 export const SIDEBAR_DATA = [
     {
-        name : 'inbox',
-        title : 'Inbox',
+        name: 'inbox',
+        title: 'Inbox',
         icon: Photo
     },
     {
-        name : 'starred',
-        title : 'Starred',
+        name: 'starred',
+        title: 'Starred',
         icon: StarBorderOutlined
     },
     {
-        name : 'sent',
-        title : 'Sent',
+        name: 'sent',
+        title: 'Sent',
         icon: SendOutlined
     },
     {
-        name : 'drafts',
-        title : 'Drafts',
+        name: 'drafts',
+        title: 'Drafts',
         icon: InsertDriveFileOutlined
     },
     {
-        name : 'bin',
-        title : 'Bin',
+        name: 'bin',
+        title: 'Bin',
         icon: DeleteOutline
     },
     {
-        name : 'allMail',
-        title : 'All Mail',
+        name: 'allmail',
+        title: 'All Mail',
         icon: MailOutline
     },
 ]
